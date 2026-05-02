@@ -199,13 +199,20 @@ const ServiceCalculator = ({ serviceType, onAddService, onCancel }: ServiceCalcu
         serviceType === "pladur" ? pladurMode : undefined
       );
 
+      const materials = result.materials.map(m => ({
+        name: m.material,
+        quantity: m.valor_tecnico,
+        unit: m.tecnico,
+        pricePerUnit: m.pricePerUnit,
+      }));
+
       return {
         id: room.id,
         name: room.name,
         walls,
         totalArea,
-        materials: result.materials,
-        totalPrice: calculateTotalPrice(result.materials)
+        materials,
+        totalPrice: calculateTotalPrice(materials)
       };
     });
 
@@ -218,13 +225,20 @@ const ServiceCalculator = ({ serviceType, onAddService, onCancel }: ServiceCalcu
       serviceType === "pladur" ? pladurMode : undefined
     );
 
+    const finalMaterials = final.materials.map(m => ({
+      name: m.material,
+      quantity: m.valor_tecnico,
+      unit: m.tecnico,
+      pricePerUnit: m.pricePerUnit,
+    }));
+
     return {
       id: uuidv4(),
       type: serviceType,
       rooms,
       totalArea,
-      materials: final.materials,
-      totalPrice: calculateTotalPrice(final.materials),
+      materials: finalMaterials,
+      totalPrice: calculateTotalPrice(finalMaterials),
       regionPricing: selectedRegion,
       width: 0,
       height: 0,

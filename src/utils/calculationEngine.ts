@@ -117,19 +117,58 @@ export function calculateTechnical(
    */
   if (serviceType === "pladur") {
     if (mode === "teto") {
+      /**
+       * 🔥 PLADUR TETO — engenharia automática
+       * Sistema F530 + perfis primários + secundários + pendurais
+       * - Perfis secundários F530: ~3.4 m/m² (espaçamento 40 cm)
+       * - Perfis primários F530: ~0.9 m/m² (espaçamento 120 cm)
+       * - Pendurais: ~1.7 und/m² (malha 90x60 cm) → reforço automático
+       * - Conectores cruzados: ~2.8 und/m²
+       * - Cantoneira perimetral: aprox. 0.5 m/m² (ajuste médio)
+       * - Parafusos placa→perfil 25mm: ~17/m²
+       * - Buchas fixação teto: ~1.7/m² (1 por pendural)
+       * - Fita papel juntas: ~1.5 m/m²
+       * - Massa juntas: 0.45 kg/m²
+       * - Placa standard 12.5mm c/ perdas 8%
+       */
       specs = [
-        { material: "Placa de gesso", unit: "m2", factor: 1.05, basePricePerUnit: 15 },
-        { material: "Perfil F530", unit: "m", factor: 3.5, basePricePerUnit: 3.5 },
-        { material: "Pendural", unit: "und", factor: 1.5, basePricePerUnit: 0.8 },
-        { material: "Parafusos", unit: "und", factor: 20, basePricePerUnit: 0.05 },
-        { material: "Massa para juntas", unit: "kg", factor: 0.4, basePricePerUnit: 2 },
+        { material: "Placa de gesso 12.5mm", unit: "m2", factor: 1.08, basePricePerUnit: 6.5 },
+        { material: "Perfil F530 (primário+secundário)", unit: "m", factor: 4.3, basePricePerUnit: 3.5 },
+        { material: "Cantoneira perimetral", unit: "m", factor: 0.5, basePricePerUnit: 2.2 },
+        { material: "Pendural regulável", unit: "und", factor: 1.7, basePricePerUnit: 0.8 },
+        { material: "Conector cruzado", unit: "und", factor: 2.8, basePricePerUnit: 0.6 },
+        { material: "Bucha fixação teto", unit: "und", factor: 1.7, basePricePerUnit: 0.25 },
+        { material: "Parafuso placa 25mm", unit: "und", factor: 17, basePricePerUnit: 0.04 },
+        { material: "Fita papel juntas", unit: "m", factor: 1.5, basePricePerUnit: 0.15 },
+        { material: "Massa para juntas", unit: "kg", factor: 0.45, basePricePerUnit: 2 },
       ];
     } else {
+      /**
+       * 🔥 PLADUR PAREDE — engenharia automática
+       * Sistema 48 (montantes M48 + guias R48) altura ref. 2.60 m
+       * - Montantes verticais cada 40 cm: ~0.96 m/m² altura → ~2.5 m/m²
+       *   (para altura média 2.6 m: 2.5 montantes/m parede × 2.6 = mantém ~2.5/m²)
+       * - Guias horizontais sup+inf: ~0.77 m/m²
+       * - Banda acústica: ~0.77 m/m²
+       * - Buchas fixação guias: ~2.5/m²
+       * - Parafusos metal-metal: ~4/m²
+       * - Parafusos placa 25mm: ~14/m² (face única; dupla face dobrar)
+       * - Lã mineral 40mm: 1 m²/m² (isolamento padrão)
+       * - Fita juntas: ~1.4 m/m²
+       * - Massa juntas: 0.35 kg/m²
+       * - Placa 12.5mm c/ perdas 5%
+       */
       specs = [
-        { material: "Placa de gesso", unit: "m2", factor: 1.05, basePricePerUnit: 15 },
-        { material: "Perfil metálico", unit: "m", factor: 2.5, basePricePerUnit: 3 },
-        { material: "Parafusos", unit: "und", factor: 15, basePricePerUnit: 0.05 },
-        { material: "Massa para juntas", unit: "kg", factor: 0.3, basePricePerUnit: 2 },
+        { material: "Placa de gesso 12.5mm", unit: "m2", factor: 1.05, basePricePerUnit: 6.5 },
+        { material: "Montante vertical M48", unit: "m", factor: 2.5, basePricePerUnit: 2.8 },
+        { material: "Guia horizontal R48", unit: "m", factor: 0.77, basePricePerUnit: 2.5 },
+        { material: "Banda acústica", unit: "m", factor: 0.77, basePricePerUnit: 0.6 },
+        { material: "Lã mineral 40mm", unit: "m2", factor: 1.0, basePricePerUnit: 4.5 },
+        { material: "Bucha fixação guias", unit: "und", factor: 2.5, basePricePerUnit: 0.2 },
+        { material: "Parafuso metal-metal", unit: "und", factor: 4, basePricePerUnit: 0.03 },
+        { material: "Parafuso placa 25mm", unit: "und", factor: 14, basePricePerUnit: 0.04 },
+        { material: "Fita papel juntas", unit: "m", factor: 1.4, basePricePerUnit: 0.15 },
+        { material: "Massa para juntas", unit: "kg", factor: 0.35, basePricePerUnit: 2 },
       ];
     }
   } else {

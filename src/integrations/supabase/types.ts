@@ -266,6 +266,7 @@ export type Database = {
         Args: { _budget_id: string; _user_id: string }
         Returns: boolean
       }
+      increment_orcamentos: { Args: never; Returns: undefined }
       room_belongs_to_user: {
         Args: { _room_id: string; _user_id: string }
         Returns: boolean
