@@ -123,22 +123,22 @@ export const useBudgetMutations = () => {
   const { user } = useAuth();
 
   /**
-   * CRIAR ORÇAMENTO (LOGIN OPCIONAL)
+   * CRIAR ORÇAMENTO (LOGIN OBRIGATÓRIO)
    */
   const createBudget = async (
     title: string,
     clientName?: string
   ): Promise<string> => {
-    const payload: any = {
+    if (!user?.id) {
+      throw new Error("Você precisa estar logado para criar um orçamento.");
+    }
+
+    const payload = {
       title,
       client_name: clientName || null,
       total_price: 0,
+      user_id: user.id,
     };
-
-    // login opcional
-    if (user?.id) {
-      payload.user_id = user.id;
-    }
 
     console.log("📦 Criando orçamento:", payload);
 
