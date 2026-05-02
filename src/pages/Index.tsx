@@ -29,6 +29,8 @@ const Index = () => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const { createBudget, saveServiceToBudget } = useBudgetMutations();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalPrice = services.reduce((sum, s) => sum + s.totalPrice, 0);
 
