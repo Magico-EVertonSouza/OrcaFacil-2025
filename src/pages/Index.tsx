@@ -12,6 +12,8 @@ import ServiceItem from "@/components/ServiceItem";
 import ServiceCalculator from "@/components/ServiceCalculator";
 import BudgetHeader from "@/components/BudgetHeader";
 import { useBudgetMutations } from "@/hooks/useBudget";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FileDown, Loader2 } from "lucide-react";
 import WelcomeSection from "@/components/WelcomeSection";
