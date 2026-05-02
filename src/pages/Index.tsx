@@ -78,6 +78,11 @@ const Index = () => {
   };
 
   const handleGeneratePDF = async () => {
+    if (!user) {
+      toast.error("Faça login para baixar o orçamento");
+      navigate("/login", { state: { from: "/" } });
+      return;
+    }
     try {
       setIsGeneratingPDF(true);
       await downloadBudgetPDF(services, budgetTitle, budgetClientName);
