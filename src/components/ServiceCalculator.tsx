@@ -301,28 +301,38 @@ const ServiceCalculator = ({ serviceType, onAddService, onCancel }: ServiceCalcu
         {/* REGION (NÃO ALTERADO) */}
         {step === "region" && (
           <div className="space-y-4">
-            <Label>País</Label>
-
-            <Select value={selectedCountry} onValueChange={handleCountryChange}>
-              <SelectTrigger />
-              <SelectContent>
-                {countries.map(c => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {selectedCountry && (
-              <Select value={selectedRegion?.region ?? ""} onValueChange={handleRegionChange}>
-                <SelectTrigger />
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2">
+                <MapPin size={16} /> País
+              </Label>
+              <Select value={selectedCountry} onValueChange={handleCountryChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o país" />
+                </SelectTrigger>
                 <SelectContent>
-                  {getRegionsByCountry(selectedCountry).map(r => (
-                    <SelectItem key={r.region} value={r.region}>
-                      {r.region}
-                    </SelectItem>
+                  {countries.map(c => (
+                    <SelectItem key={c} value={c}>{c}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {selectedCountry && (
+              <div className="space-y-2">
+                <Label>Região</Label>
+                <Select value={selectedRegion?.region ?? ""} onValueChange={handleRegionChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione a região" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getRegionsByCountry(selectedCountry).map(r => (
+                      <SelectItem key={r.region} value={r.region}>
+                        {r.region}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             )}
           </div>
         )}
