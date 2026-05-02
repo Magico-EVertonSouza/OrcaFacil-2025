@@ -163,7 +163,7 @@ export type Database = {
           title: string
           total_price: number
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           client_name?: string | null
@@ -174,7 +174,7 @@ export type Database = {
           title?: string
           total_price?: number
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           client_name?: string | null
@@ -185,7 +185,7 @@ export type Database = {
           title?: string
           total_price?: number
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
