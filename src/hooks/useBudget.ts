@@ -193,16 +193,18 @@ export const useBudgetMutations = () => {
         .select("id")
         .single();
 
+      if (!roomData?.id) continue;
+
       const { data: svcData } = await supabase
         .from("budget_services")
         .insert({
-          room_id: roomData?.id,
+          room_id: roomData.id,
           service_type_id: service.type,
           area: room.totalArea,
           width: service.width || 0,
           height: service.height || 0,
           total_price: room.totalPrice,
-          walls_data: room.walls,
+          walls_data: room.walls as any,
         })
         .select("id")
         .single();
