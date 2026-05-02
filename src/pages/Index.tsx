@@ -12,6 +12,8 @@ import ServiceItem from "@/components/ServiceItem";
 import ServiceCalculator from "@/components/ServiceCalculator";
 import BudgetHeader from "@/components/BudgetHeader";
 import { useBudgetMutations } from "@/hooks/useBudget";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FileDown, Loader2 } from "lucide-react";
 import WelcomeSection from "@/components/WelcomeSection";
@@ -27,6 +29,8 @@ const Index = () => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const { createBudget, saveServiceToBudget } = useBudgetMutations();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalPrice = services.reduce((sum, s) => sum + s.totalPrice, 0);
 
@@ -74,6 +78,11 @@ const Index = () => {
   };
 
   const handleGeneratePDF = async () => {
+    if (!user) {
+      toast.error("Faça login para baixar o orçamento");
+      navigate("/login", { state: { from: "/" } });
+      return;
+    }
     try {
       setIsGeneratingPDF(true);
       await downloadBudgetPDF(services, budgetTitle, budgetClientName);
