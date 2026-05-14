@@ -29,8 +29,12 @@ export interface BudgetFull extends BudgetSummary {
  * =========================================
  */
 export const useListBudgets = () => {
+  const { user } = useAuth();
+
   return useQuery({
-    queryKey: ["budgets"],
+    queryKey: ["budgets", user?.id],
+    enabled: !!user?.id, // 🔥 evita 401 quando não logado ainda
+
     queryFn: async (): Promise<BudgetSummary[]> => {
       const { data, error } = await supabase
         .from("budgets")
@@ -50,13 +54,14 @@ export const useListBudgets = () => {
 /**
  * =========================================
  * CARREGAR ORÇAMENTO COMPLETO
- * (RESTAURADO - necessário para página OrcamentosPage)
  * =========================================
  */
 export const useLoadBudget = (budgetId: string | null) => {
+  const { user } = useAuth();
+
   return useQuery({
     queryKey: ["budget", budgetId],
-    enabled: !!budgetId,
+    enabled: !!budgetId && !!user?.id, // 🔥 evita chamada sem login
 
     queryFn: async (): Promise<BudgetFull | null> => {
       if (!budgetId) return null;
@@ -67,20 +72,14 @@ export const useLoadBudget = (budgetId: string | null) => {
         .eq("id", budgetId)
         .single();
 
-      if (bErr) {
-        console.error("Erro budget:", bErr);
-        throw bErr;
-      }
+      if (bErr) throw bErr;
 
       const { data: rooms, error: rErr } = await supabase
         .from("budget_rooms")
         .select("*")
         .eq("budget_id", budgetId);
 
-      if (rErr) {
-        console.error("Erro rooms:", rErr);
-        throw rErr;
-      }
+      if (rErr) throw rErr;
 
       const { data: services } = await supabase
         .from("budget_services")
@@ -123,12 +122,18 @@ export const useBudgetMutations = () => {
   const { user } = useAuth();
 
   /**
-   * CRIAR ORÇAMENTO (LOGIN OBRIGATÓRIO)
+   * CRIAR ORÇAMENTO
    */
   const createBudget = async (
     title: string,
     clientName?: string
   ): Promise<string> => {
+
+    // 🔥 proteção dupla (evita erro estranho de auth desync)
+    if (!user) {
+      throw new Error("Auth ainda não carregado. Tente novamente.");
+    }
+
     if (!user?.id) {
       throw new Error("Você precisa estar logado para criar um orçamento.");
     }
@@ -140,8 +145,6 @@ export const useBudgetMutations = () => {
       user_id: user.id,
     };
 
-    console.log("📦 Criando orçamento:", payload);
-
     const { data, error } = await supabase
       .from("budgets")
       .insert(payload)
@@ -149,7 +152,7 @@ export const useBudgetMutations = () => {
       .single();
 
     if (error) {
-      console.error("💥 Erro createBudget:", error);
+      console.error("Erro createBudget:", error);
       throw error;
     }
 
@@ -167,10 +170,7 @@ export const useBudgetMutations = () => {
       .delete()
       .eq("id", budgetId);
 
-    if (error) {
-      console.error("Erro delete:", error);
-      throw error;
-    }
+    if (error) throw error;
 
     queryClient.invalidateQueries({ queryKey: ["budgets"] });
   };
